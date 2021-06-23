@@ -6,6 +6,7 @@ import co.kr.sppartners.entitiy.User;
 import co.kr.sppartners.repository.UserDAO;
 import co.kr.sppartners.repository.UserRepository;
 import co.kr.sppartners.util.SecurityUtil;
+import co.kr.sppartners.vo.UserVo;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.egovframe.rte.fdl.cmmn.EgovAbstractServiceImpl;
@@ -61,7 +62,7 @@ public class UserService extends EgovAbstractServiceImpl {
         return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
     }
 
-    public List<UserDto> selectUserDto() throws Exception {
+    public List<UserVo> selectUserDto() throws Exception {
         return userDAO.selectUserDto();
     }
 }

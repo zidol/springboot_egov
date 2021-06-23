@@ -3,6 +3,6 @@
 
 <configuration>
     <typeAliases>
-        <typeAlias type="co.kr.sppartners.dto.UserDto" alias="UserDto"/>
+        <typeAlias type="co.kr.sppartners.vo.UserVo" alias="UserVo"/>
     </typeAliases>
 </configuration>

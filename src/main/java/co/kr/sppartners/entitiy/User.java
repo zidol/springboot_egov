@@ -13,6 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "authorities")
 public class User {
 
     @JsonIgnore

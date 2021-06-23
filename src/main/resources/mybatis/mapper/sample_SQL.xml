@@ -2,11 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SampleDAO">
 
-	<select id="selectUser" resultType="UserDto">
+	<select id="selectUser" resultType="UserVo">
 		select username
 		     , password
 		     , nickname
 		  from user
 	</select>
 
+
+	<select id="findUserByUsername" parameterType="UserVo" resultType="UserVo">
+		select us.user_id as userId
+			, us.activated
+			, us.username
+			, us.nickname
+			, us.password
+			from user us
+		where us.username = #{userName}
+	</select>
+
+	<insert id="insertUser" parameterType="UserVo">
+		<selectKey resultType="long" keyProperty="userId" order="BEFORE">
+			SELECT MAX(user_id)+1 FROM user
+		</selectKey>
+		insert into user
+				( user_id
+				, username
+				, nickname
+				, activated
+				, password)
+		values ( #{userId}
+				,#{username}
+				,#{nickname}
+				,#{activated}
+				,#{password})
+
+	</insert>
+
+	<insert id="insertUserAuthority" parameterType="UserVo">
+		insert into user_authority
+				    ( user_id
+					, authority_name)
+				values
+					(#{userId}
+					,#{authorityName})
+	</insert>
+
+	<select id="findOneWithAuthoritiesByUsername" parameterType="java.lang.String" resultType="UserVo">
+		select us.user_id as userId
+		, us.activated
+		, us.username
+		, us.nickname
+		, us.password
+		, ua.authority_name as authorityName
+		from user us
+		left join user_authority ua
+		on us.user_id = ua.user_id
+		left join authority ath
+		on ua.authority_name = ath.authority_name
+		where us.username = #{userName}
+	</select>
 </mapper>
