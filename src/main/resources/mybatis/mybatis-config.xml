@@ -4,5 +4,6 @@
 <configuration>
     <typeAliases>
         <typeAlias type="co.kr.sppartners.vo.UserVo" alias="UserVo"/>
+        <typeAlias type="co.kr.sppartners.vo.AuthorityVo" alias="AuthorityVo"/>
     </typeAliases>
 </configuration>

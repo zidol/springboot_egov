@@ -65,7 +65,7 @@ public class UserBatisService {
     @Transactional(readOnly = true)
     public Optional<UserVo> getMyUserWithAuthorities() {
         Optional<String> currentUsername = SecurityUtil.getCurrentUsername();
-        return getOptionalUserVo(currentUsername.get());
+        return userDAO.findOneWithAuthoritiesByUsername(currentUsername.get());
     }
 
     /**
@@ -75,28 +75,53 @@ public class UserBatisService {
      */
     @Transactional(readOnly = true)
     public Optional<UserVo> getUserWithAuthorities(String username) {
-        return getOptionalUserVo(username);
+        return userDAO.findOneWithAuthoritiesByUsername(username);
     }
 
-    private Optional<UserVo> getOptionalUserVo(String currentUsername) {
-        List<UserVo> resultList = userDAO.findOneWithAuthoritiesByUsername(currentUsername);
-        UserVo resultUser = null;
-        if(resultList.size() == 0) {
-            throw new RuntimeException("조회 데이터가 없습니다.");
-        } else {
-            resultUser = UserVo.builder()
-                    .username(resultList.get(0).getUsername())
-                    .nickname(resultList.get(0).getNickname())
-                    .activated(resultList.get(0).isActivated())
-                    .build();
-        }
-        List<AuthorityVo> authorityVoList = new ArrayList<>();
-        for (UserVo userVo : resultList) {
-            AuthorityVo authorityVo = new AuthorityVo();
-            authorityVo.setAuthorityName(userVo.getAuthorityName());
-            authorityVoList.add(authorityVo);
-        }
-        resultUser.setAuthorities(authorityVoList);
-        return Optional.ofNullable(resultUser);
+//    public Optional<UserVo> getOptionalUserVo(String currentUsername) {
+//        List<UserVo> resultList = userDAO.findOneWithAuthoritiesByUsername(currentUsername);
+//        UserVo resultUser = null;
+//        if(resultList.size() == 0) {
+//            throw new RuntimeException("조회 데이터가 없습니다.");
+//        } else {
+//            resultUser = UserVo.builder()
+//                    .username(resultList.get(0).getUsername())
+//                    .nickname(resultList.get(0).getNickname())
+//                    .activated(resultList.get(0).isActivated())
+//                    .build();
+//        }
+//        List<AuthorityVo> authorityVoList = new ArrayList<>();
+//        for (UserVo userVo : resultList) {
+//            AuthorityVo authorityVo = new AuthorityVo();
+//            authorityVo.setAuthorityName(userVo.getAuthorityName());
+//            authorityVoList.add(authorityVo);
+//        }
+//        resultUser.setAuthorities(authorityVoList);
+//        return Optional.ofNullable(resultUser);
+//    }
+
+    public Optional<UserVo> findOneWithAuthoritiesByUsername(String currentUsername) {
+        Optional<UserVo> result = userDAO.findOneWithAuthoritiesByUsername(currentUsername);
+//        UserVo resultUser = null;
+//        if(resultList.size() == 0) {
+//            throw new RuntimeException("조회 데이터가 없습니다.");
+//        } else {
+//            resultUser = UserVo.builder()
+//                    .username(resultList.get(0).getUsername())
+//                    .nickname(resultList.get(0).getNickname())
+//                    .activated(resultList.get(0).isActivated())
+//                    .password(resultList.get(0).getPassword())
+//                    .userId(resultList.get(0).getUserId())
+//                    .build();
+//        }
+//        List<AuthorityVo> authorityVoList = new ArrayList<>();
+//        for (UserVo userVo : resultList) {
+//            AuthorityVo authorityVo = new AuthorityVo();
+//            authorityVo.setAuthorityName(userVo.getAuthorityName());
+//            authorityVoList.add(authorityVo);
+//        }
+//        resultUser.setAuthorities(authorityVoList);
+//        return Optional.ofNullable(resultUser);
+        return result;
     }
 }

@@ -2,6 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="SampleDAO">
 
+	<resultMap id="findOneWithAuthoritiesMap" type="UserVo">
+		<result property="userId" column="user_id"/>
+		<result property="activated" column="activated"/>
+		<result property="username" column="username"/>
+		<result property="nickname" column="nickname"/>
+		<result property="password" column="password"/>
+
+		<collection property="authorities" column="user_id" javaType="java.util.ArrayList" ofType="AuthorityVo" select="findAuthoritiesListById"/>
+	</resultMap>
+	<resultMap id="authorityNameMap" type="AuthorityVo">
+		<result property="userId" column="user_id" />
+		<result property="authorityName" column="authority_name" />
+	</resultMap>
+
+	<select id="findOneWithAuthoritiesByUsername" resultMap="findOneWithAuthoritiesMap">
+		select user_id
+			, username
+			, nickname
+			, activated
+			, password
+		from user
+		where username = #{username}
+	</select>
+
+	<select id="findAuthoritiesListById" parameterType="java.lang.Integer" resultMap="authorityNameMap">
+		select user_id
+			, authority_name
+	from user_authority
+		where user_id = #{userId}
+	</select>
 	<select id="selectUser" resultType="UserVo">
 		select username
 		     , password
@@ -11,13 +41,26 @@
 
 
 	<select id="findUserByUsername" parameterType="UserVo" resultType="UserVo">
+<!--		select us.user_id as userId-->
+<!--			, us.activated-->
+<!--			, us.username-->
+<!--			, us.nickname-->
+<!--			, us.password-->
+<!--			from user us-->
+<!--		where us.username = #{userName}-->
 		select us.user_id as userId
-			, us.activated
-			, us.username
-			, us.nickname
-			, us.password
-			from user us
-		where us.username = #{userName}
+		, us.activated
+		, us.username
+		, us.nickname
+		, us.password
+		, ua.authority_name as authorityName
+		from user us
+		left join user_authority ua
+		on us.user_id = ua.user_id
+		left join authority ath
+		on ua.authority_name = ath.authority_name
+		where us.username =  #{userName}
+		limit 1
 	</select>
 
 	<insert id="insertUser" parameterType="UserVo">
@@ -47,7 +90,22 @@
 					,#{authorityName})
 	</insert>
 
-	<select id="findOneWithAuthoritiesByUsername" parameterType="java.lang.String" resultType="UserVo">
+<!--	<select id="findOneWithAuthoritiesByUsername" parameterType="java.lang.String" resultType="UserVo">-->
+<!--		select us.user_id as userId-->
+<!--		, us.activated-->
+<!--		, us.username-->
+<!--		, us.nickname-->
+<!--		, us.password-->
+<!--		, ua.authority_name as authorityName-->
+<!--		from user us-->
+<!--		left join user_authority ua-->
+<!--		on us.user_id = ua.user_id-->
+<!--		left join authority ath-->
+<!--		on ua.authority_name = ath.authority_name-->
+<!--		where us.username = #{userName}-->
+<!--	</select>-->
+
+	<select id="findOneWithAuthorities" parameterType="java.lang.String" resultType="UserVo">
 		select us.user_id as userId
 		, us.activated
 		, us.username

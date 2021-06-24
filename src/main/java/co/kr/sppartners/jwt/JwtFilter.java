@@ -30,9 +30,6 @@ public class JwtFilter extends GenericFilterBean {
 
     /***
      *
-     * @param request
-     * @param response
-     * @param chain
      * @throws IOException
      * @throws ServletException
      * 토큰의 인증정볼르 SercurityContext에 저장하는 역할 수행

@@ -19,7 +19,7 @@ public class UserDAO extends EgovAbstractMapper {
         return selectList(NAME_SPACE + "selectUser");
     }
 
-    public Optional<UserVo>  findUserByUsername(String username) throws Exception {
+    public Optional<UserVo>  findUserByUsername(String username) {
         UserVo userVo = selectOne(NAME_SPACE + "findUserByUsername", username);
         return Optional.ofNullable(userVo);
     }
@@ -32,7 +32,12 @@ public class UserDAO extends EgovAbstractMapper {
         return insert(NAME_SPACE + "insertUserAuthority", user);
     }
 
-    public List<UserVo> findOneWithAuthoritiesByUsername(String username) {
-        return selectList(NAME_SPACE + "findOneWithAuthoritiesByUsername", username);
+    public UserVo findOneWithAuthorities(String username) {
+        return selectOne(NAME_SPACE + "findOneWithAuthorities", username);
+    }
+
+    public Optional<UserVo> findOneWithAuthoritiesByUsername(String username){
+        UserVo userVo = selectOne(NAME_SPACE + "findOneWithAuthoritiesByUsername", username);
+        return Optional.ofNullable(userVo);
     }
 }

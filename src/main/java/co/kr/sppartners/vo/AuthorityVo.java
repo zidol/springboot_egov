@@ -8,7 +8,9 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class AuthorityVo {
 
+    private Long userId;
     private String authorityName;
 }
